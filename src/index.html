@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Contrôle Arduino</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.0/mqtt.min.js"></script>
+</head>
+<body>
+  <h1>Détection de Présence Arduino</h1>
+  <div id="presence-status">Aucune détection</div>
+
+  <script>
+    const client = mqtt.connect("ws://Adresse_IP_du_Broker:9001"); // Broker avec WebSocket
+
+    client.on("connect", () => {
+      console.log("Connecté au broker MQTT");
+      client.subscribe("arduino/presence");
+    });
+
+    client.on("message", (topic, message) => {
+      if (topic === "arduino/presence") {
+        document.getElementById("presence-status").innerText = message.toString();
+      }
+    });
+  </script>
+</body>
+</html>
